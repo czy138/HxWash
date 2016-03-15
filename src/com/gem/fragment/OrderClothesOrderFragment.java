@@ -15,7 +15,7 @@ public class OrderClothesOrderFragment extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 				View v =inflater.inflate(R.layout.fragment_order_clothes_order, container,false);
-						return v;
+				return v;
 	}
 	
 }
