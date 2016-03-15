@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HxWash</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_business_list">浣熊洗</string>
+    <string name="title_activity_business_details">BusinessDetailsActivity</string>
+    <string name="order_clothes">洗衣</string>
+    <string name="assess">评价</string>
+    <string name="details">商家</string>
+    <string name="index">首页</string>
+    <string name="order">订单</string>
+    <string name="mine">我的</string>
+    <string name="title_activity_index">IndexActivity</string>
+    <string name="order_top_clothes_text">洗衣订单</string>
+    <string name="order_top_goods_text">购物订单</string>
+    <string name="business_list_clothes_text">衣物</string>
+    <string name="business_list_luxury_text">奢侈品</string>
+    <string name="business_list_bed_text">家居用品</string>
+    <string name="business_list_washtype_text">机洗</string>
+    <string name="title_activity_address">AddressActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+</resources>

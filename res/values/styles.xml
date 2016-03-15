@@ -1,0 +1,76 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+     <style name="main_tab_bottom">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/bottom_text_color</item>
+       <!-- 当前的文字太长，会以...表示 
+        <item name="android:background">@drawable/transparent</item>
+        <item name="android:drawablePadding">@dimen/bottom_tab_padding_drawable</item>
+       -->
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">2.0dip</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">fill_parent</item>
+        <!-- 去按钮立体效果 -->
+        <item name="android:button">@null</item>
+        <item name="android:singleLine">true</item>
+        
+        <item name="android:layout_weight">1.0</item>
+    </style>
+        
+        <!-- view浅灰色细分割线样式 -->
+    <style name="little_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/little_line_clo</item>
+    </style>
+    <!-- 垂直分割线 -->
+     <style name="vertical_line">
+        <item name="android:layout_width">1px</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:background">@color/little_line_clo</item>
+    </style>
+    
+      <!-- view灰色分割线样式 -->
+    <style name="big_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:background">@color/big_line_clo</item>
+    </style>
+ <!--    item分割线 -->
+    <style name="item_line">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">@color/big_line_clo</item>
+    </style>
+    <!-- 附近商家标题样式 -->
+    <style name="title_list">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@color/activity_background_white</item>
+    </style>
+<!--     星星 -->
+     <style name="MyRatingBar" parent="@android:style/Widget.RatingBar">    
+        <item name="android:progressDrawable">@drawable/myratingbar</item>    
+        <item name="android:minHeight">15dip</item>    
+        <item name="android:maxHeight">15dip</item>    
+    </style>
+</resources>

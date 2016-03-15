@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_background_white"
+    tools:context="com.gem.hxwasha.BusinessDetailsActivity" >
+
+    <ImageView
+        android:id="@+id/iv_business"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_launcher" />
+    	<!--  android:background="@drawable/ic_launcher" -->
+	 <RadioGroup
+        android:id="@+id/group"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="2dp"
+        android:layout_below="@+id/iv_business">
+       <!--     -->
+        <RadioButton
+            android:id="@+id/order_clothes"
+            style="@style/main_tab_bottom"
+            android:text="@string/order_clothes"
+            android:textColor="@color/bottom_text_color"
+            android:checked="true"
+            />
+    	<!-- style="@style/main_tab_bottom" -->
+        <RadioButton
+            android:id="@+id/assess"
+            style="@style/main_tab_bottom"
+            android:text="@string/assess"
+            android:textColor="@color/bottom_text_color"
+            />
+            <!--  style="@style/main_tab_bottom" -->
+        <RadioButton
+            android:id="@+id/details"
+            style="@style/main_tab_bottom"
+            android:text="@string/details"
+            android:textColor="@color/bottom_text_color"
+             />
+    </RadioGroup>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/group" />
+
+   
+
+</RelativeLayout>

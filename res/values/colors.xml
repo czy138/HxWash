@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="activity_background_white">#FFFFFF</color>
+    <color name="big_line_clo">#EFEFEF</color>
+    <color name="little_line_clo">#666666</color>
+    <color name="list_tital">#000000</color>
+</resources>
