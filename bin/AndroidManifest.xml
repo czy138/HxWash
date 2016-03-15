@@ -78,10 +78,7 @@
             android:name=".AddressActivity"
             android:label="@string/title_activity_address" >
         </activity>
-        <activity
-            android:name=".TestActivity"
-            android:label="@string/title_activity_test" >
-        </activity>
+
         <!-- 短信验证 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
