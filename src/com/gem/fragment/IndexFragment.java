@@ -226,7 +226,6 @@ public class IndexFragment extends Fragment implements OnClickListener {
 					@Override
 					public void onScrollStateChanged(AbsListView view, int scrollState) {
 						// TODO Auto-generated method stub
-						
 						fixListViewHeight(lv);
 					}
 					
