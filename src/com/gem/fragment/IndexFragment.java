@@ -1,5 +1,6 @@
 package com.gem.fragment;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -29,11 +32,21 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
+import com.gem.adapter.BusinessListAdapter;
 import com.gem.entity.Business;
 import com.gem.hxwasha.BusinessListActivity;
 import com.gem.hxwasha.R;
+import com.gem.util.Content;
 import com.gem.util.LocationUtil;
 import com.gem.util.SingleRequestQueue;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 public class IndexFragment extends Fragment implements OnClickListener {
 	ListView lv;
@@ -166,51 +179,67 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	
 	//从网络获取商家列表
 	public void getList(){
-//		String url = "http://"+Content.getIp()+":8080/HXXa/BusinessListServlet";
-//		//String url ="http://"+Content.IP+":8080/HXXa/BusinessListServlet";
-//		HttpUtils http = new HttpUtils();
-//		RequestParams params = new RequestParams();
-//		params.addHeader("name", "value");
-//		if(isDefaultList){
-//			params.addQueryStringParameter("from","indexDefault");
-//			params.addQueryStringParameter("curPage", curPage+"");
-//			
-//		}else{
-//			params.addQueryStringParameter("from","indexByLocation");
-//			//定位后改变indexByLocation的值，定位信息存入手机本地，发到后台，后台保存定位信息
-//			//当 from的值为indexByLocation时返回相应的List
-//		}
-//		http.send(HttpMethod.GET,url,params, new RequestCallBack<String>() {
-//
-//			@Override
-//			public void onFailure(HttpException arg0, String arg1) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void onSuccess(ResponseInfo<String> arg0) {
-//				// TODO Auto-generated method stub
-//				Type type =	new TypeToken<List<Business>>() {  
-//                }.getType();
-//				Gson gson = new Gson();
-//				bs = gson.fromJson(arg0.result,type);
-//				//当第一次显示时，加入用户消费较多的商家
-//				if(curPage==0){
-//					List<Business> temp = new ArrayList<Business>();
-//					List<Business> b=initData();
-//					if(b!=null){
-//						temp.addAll(b);
-//						bs.removeAll(b);
-//						temp.addAll(bs);
-//						bs=temp;
-//					}
-//				}
-//
-//				lv.setAdapter(new BusinessListAdapter(bs,context,queue));
-//				fixListViewHeight(lv);
-//			}
-//		});
+		String url = "http://"+Content.getIp()+":8080/HXXa/BusinessListServlet";
+		//String url ="http://"+Content.IP+":8080/HXXa/BusinessListServlet";
+		HttpUtils http = new HttpUtils();
+		RequestParams params = new RequestParams();
+		params.addHeader("name", "value");
+		if(isDefaultList){
+			params.addQueryStringParameter("from","indexDefault");
+			params.addQueryStringParameter("curPage", curPage+"");
+			
+		}else{
+			params.addQueryStringParameter("from","indexByLocation");
+			//定位后改变indexByLocation的值，定位信息存入手机本地，发到后台，后台保存定位信息
+			//当 from的值为indexByLocation时返回相应的List
+		}
+		http.send(HttpMethod.GET,url,params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				Type type =	new TypeToken<List<Business>>() {  
+                }.getType();
+				Gson gson = new Gson();
+				bs = gson.fromJson(arg0.result,type);
+				//当第一次显示时，加入用户消费较多的商家
+				if(curPage==1){
+					List<Business> temp = new ArrayList<Business>();
+					List<Business> b=initData();
+					if(b!=null){
+						temp.addAll(b);
+						bs.removeAll(b);
+						temp.addAll(bs);
+						bs=temp;
+					}
+				}
+
+				lv.setAdapter(new BusinessListAdapter(bs,context,queue));
+				lv.setOnScrollListener(new OnScrollListener() {
+					
+					@Override
+					public void onScrollStateChanged(AbsListView view, int scrollState) {
+						// TODO Auto-generated method stub
+						
+						fixListViewHeight(lv);
+					}
+					
+					@Override
+					public void onScroll(AbsListView view, int firstVisibleItem,
+							int visibleItemCount, int totalItemCount) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
+				
+			}
+		});
 	}
 
 

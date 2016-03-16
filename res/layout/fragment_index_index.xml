@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical" >
 
         <!-- 顶部图片 -->
@@ -27,15 +27,22 @@
                 android:text="定位"
                 android:textColor="#744000"
                 android:textSize="20sp" />
-        </RelativeLayout>
 
-        <android.support.v4.view.ViewPager
-        android:id="@+id/index_index_viewpage"
-        android:layout_width="wrap_content"
-        android:layout_height="180dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rel_title" >
-    </android.support.v4.view.ViewPager>
+        </RelativeLayout>
+        <RelativeLayout
+           android:id="@+id/rl_index_vp"
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:layout_below="@+id/rel_title"
+           android:gravity="center" >
+			    <android.support.v4.view.ViewPager
+			        android:id="@+id/index_index_viewpage"
+			        android:layout_width="wrap_content"
+			        android:layout_height="180dp"
+			        android:layout_alignParentLeft="true"
+			         >
+			   	</android.support.v4.view.ViewPager>
+		  </RelativeLayout>
        
 
         <!-- 四个按钮 -->
@@ -44,7 +51,7 @@
             android:id="@+id/ll_four_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/index_index_viewpage"
+            android:layout_below="@+id/rl_index_vp"
             android:background="#FFFFFF" >
 
             <RelativeLayout

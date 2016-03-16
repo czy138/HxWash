@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!--
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="match_parent"
+>
+	<View 
+	    android:id="@+id/view1"
+	    android:layout_width="match_parent"
+	    android:layout_height="20dp"
+	    android:background="#efefef"/>
+	<ListView
+	    android:id="@+id/lv_order"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
+	    android:layout_below="@+id/view1"
+	    android:divider="#efefef"
+	    android:dividerHeight="15dp" >
 
-</ListView>
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="洗衣订单" />
+	</ListView>
 	
-</LinearLayout>
+</RelativeLayout>
