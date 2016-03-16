@@ -1,7 +1,5 @@
 package com.gem.util;
 
-import com.lidroid.xutils.BitmapUtils;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.SparseArray;
