@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefef" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff" >
+
+        <TextView
+            android:id="@+id/tv_wash_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:text="陈记洗衣店"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/tv_wash_store_name"
+            android:src="@drawable/return3" />
+
+        <TextView
+            android:id="@+id/tv_evaluate_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_wash_store_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="待评价"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#efefef"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/relativeLayout1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view1"
+        android:background="#ffffff" >
+
+        <ImageView
+            android:id="@+id/iv_wash_store_header"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/wash_store_header" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/iv_wash_store_header"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/iv_wash_store_header"
+            android:text="￥"
+            android:textColor="#ff0000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_wash_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textView1"
+            android:layout_alignBottom="@+id/textView1"
+            android:layout_toRightOf="@+id/textView1"
+            android:text="18"
+            android:textColor="#ff0000"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_wash_order_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:textColor="#666666"
+            android:text="03-15 12:00:00" />
+
+        <TextView
+            android:id="@+id/tv_wash_order_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_wash_order_time"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:textColor="#666666"
+            android:text="文汇广场B栋六楼" />
+        <Button
+            android:id="@+id/btn_reorder"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/white_shape_btn"
+            android:layout_marginBottom="10dp"
+            android:textSize="16sp"
+            android:text="再来一单" />
+
+        <Button
+            android:id="@+id/btn_wash_order_evaluate"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_alignBaseline="@+id/btn_reorder"
+            android:layout_alignBottom="@+id/btn_reorder"
+            android:layout_toRightOf="@+id/tv_wash_price"
+            android:background="@drawable/shape_btn"
+            android:layout_marginLeft="10dp"
+            android:text="订单评价"
+            android:textColor="#744000"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
