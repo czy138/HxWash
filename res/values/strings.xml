@@ -24,5 +24,8 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_chose_pay_type">ChosePayTypeActivity</string>
     <string name="pay_acount">余额支付</string>
-	<string name="pay_zfb">支付宝</string>
+    <string name="pay_zfb">支付宝</string>
+    <string name="title_activity_pay_account">PayAccountActivity</string>
+    <string name="title_activity_pay">PayActivity</string>
+
 </resources>

@@ -7,7 +7,7 @@ import java.util.Properties;
 import android.util.Log;
 
 public class Content {
-	public static final int PAGESIZE=5;
+	public static final int PAGESIZE=10;
 	public static String getIp(){
 		Properties p =new Properties();
 		InputStream input = Content.class.getResourceAsStream("net.properties");

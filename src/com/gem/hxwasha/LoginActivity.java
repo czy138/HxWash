@@ -1,8 +1,9 @@
 package com.gem.hxwasha;
 
+import java.lang.reflect.Type;
+
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -12,18 +13,28 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.FrameLayout.LayoutParams;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
+import com.gem.entity.User;
+import com.gem.util.Content;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
 public class LoginActivity extends Activity implements OnClickListener {
@@ -35,7 +46,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 	Button requestCodeBtn;
 	@ViewInject(R.id.login_commit_btn)
 	Button commitBtn;
-	int i = 30;//倒计时
+	
+	String phone;
+	int i = 120;//倒计时
 	
 	SharedPreferences sharedPreferences;
 	
@@ -76,7 +89,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			} else if (msg.what == -8) {
 				requestCodeBtn.setText("获取验证码");
 				requestCodeBtn.setClickable(true);
-				i = 30;
+				i = 120;
 			} else {
 				int event = msg.arg1;
 				int result = msg.arg2;
@@ -87,13 +100,10 @@ public class LoginActivity extends Activity implements OnClickListener {
 					if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 						Toast.makeText(getApplicationContext(), "提交验证码成功",
 								Toast.LENGTH_SHORT).show();
-						Intent intent = new Intent(LoginActivity.this,
-								MainActivity.class);
-						startActivity(intent);
-				           Editor edit =sharedPreferences.edit();
-				            edit.putString("loginUser", "");
-				       
-				            edit.commit();
+//						Intent intent = new Intent(LoginActivity.this,
+//								MainActivity.class);
+//						startActivity(intent);
+						
 					} else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
 						Toast.makeText(getApplicationContext(), "验证码已经发送",
 								Toast.LENGTH_SHORT).show();
@@ -105,10 +115,37 @@ public class LoginActivity extends Activity implements OnClickListener {
 		}
 	};
 	
+	public void login(){
+		String url ="http://"+Content.getIp()+":8080/HXXa/UserLoginServlet";
+		HttpUtils http = new HttpUtils();
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("phone",phone);
+		http.send(HttpMethod.GET, url, params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+//				Type type = new TypeToken<User>(){}.getType();
+//				Gson gson = new Gson();
+//				gson.fromJson(arg0.result, type);
+			    Editor edit =sharedPreferences.edit();
+		        edit.putString("loginUser", arg0.result);
+		        edit.commit();
+			}
+		});
+    
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		String phoneNums = inputPhoneEt.getText().toString();
+		phone =phoneNums;
 		switch (v.getId()) {
 		case R.id.login_request_code_btn:
 			// 1. 通过规则判断手机号
@@ -140,6 +177,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.login_commit_btn:
+			login();
 			SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt
 					.getText().toString());
 			createProgressBar();
