@@ -160,7 +160,7 @@ public class BusinessListActivity extends Activity implements OnClickListener,On
 				temp = gson.fromJson(arg0.result,type);
 				if(isFrist){
 					bs=temp;
-					adapter=new BusinessListAdapter(bs, context, queue);
+					adapter=new BusinessListAdapter(bs, context);
 					lv.setAdapter(adapter);
 				}else{
 

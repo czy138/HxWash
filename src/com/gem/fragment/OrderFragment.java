@@ -2,6 +2,7 @@ package com.gem.fragment;
 
 import com.gem.hxwasha.R;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ public class OrderFragment extends Fragment implements OnClickListener {
 		tvGoods = (TextView) v.findViewById(R.id.tv_goods_order);
 		tvClothes.setOnClickListener(this);
 		tvGoods.setOnClickListener(this);
+		tvClothes.setBackgroundColor(Color.rgb(228, 228, 228));
 		
 		 orderGoodsOrderFragment =new OrderGoodsOrderFragment();
 		 orderClothesOrderFragment=new OrderClothesOrderFragment();
@@ -41,9 +43,15 @@ public class OrderFragment extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.tv_clothes_order:
+			tvGoods.setBackgroundColor(Color.WHITE);
+			tvClothes.setBackgroundColor(Color.rgb(228, 228, 228));
+
 			fragmentToggle(orderClothesOrderFragment);
 			break;
 		case R.id.tv_goods_order:
+			tvGoods.setBackgroundColor(Color.rgb(228, 228, 228));
+			tvClothes.setBackgroundColor(Color.WHITE);
+
 			fragmentToggle(orderGoodsOrderFragment);
 			break;
 		}

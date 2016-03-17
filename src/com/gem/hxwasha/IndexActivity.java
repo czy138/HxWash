@@ -80,7 +80,7 @@ public class IndexActivity extends FragmentActivity implements OnPageChangeListe
 			item=2;
 			break;
 		}
-		vp.setCurrentItem(item);
+		vp.setCurrentItem(item); 
 	}
 
 	@Override

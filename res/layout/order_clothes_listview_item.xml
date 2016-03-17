@@ -4,43 +4,19 @@
     android:layout_height="match_parent"
     android:background="#efefef" >
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout1"
+     <View 
+        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="15dp"
+        android:background="#efefef"/>
+
+    <!-- <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#efefef"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="#ffffff" >
-
-        <TextView
-            android:id="@+id/tv_wash_store_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="24dp"
-            android:text="陈记洗衣店"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/tv_wash_store_name"
-            android:src="@drawable/return3" />
-
-        <TextView
-            android:id="@+id/tv_evaluate_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tv_wash_store_name"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:text="待评价"
-            android:textSize="16sp" />
-    </RelativeLayout>
+        android:layout_below="@+id/relativeLayout1" /> -->
 
     <View
         android:id="@+id/view1"
@@ -132,6 +108,44 @@
             android:textColor="#744000"
             android:textSize="16sp" />
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view"
+        android:background="#ffffff" >
+
+        <TextView
+            android:id="@+id/tv_wash_store_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="24dp"
+            android:text="陈记洗衣店"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/tv_wash_store_name"
+            android:src="@drawable/return3" />
+
+        <TextView
+            android:id="@+id/tv_evaluate_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_wash_store_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:text="待评价"
+            android:textSize="16sp" />
     </RelativeLayout>
 
 </RelativeLayout>

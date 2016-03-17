@@ -21,7 +21,7 @@ public class BusinessListAdapter extends BaseAdapter {
 	List<Business> bs;
 	Context context;
 	ImageUtil imageUtil;
-	public BusinessListAdapter(List<Business> bs,Context context,RequestQueue queue){
+	public BusinessListAdapter(List<Business> bs,Context context){
 		this.bs=bs;
 		this.context=context;
 		imageUtil=new ImageUtil(context);
@@ -52,7 +52,7 @@ public class BusinessListAdapter extends BaseAdapter {
 			holder=(ViewHolder) convertView.getTag();
 		}else{
 			convertView =LayoutInflater.from(context).inflate(R.layout.item_business_list,null);
-			holder.ratingBar=(RatingBar) convertView.findViewById(R.id.ratingBar1);
+			holder.ratingBar=(RatingBar) convertView.findViewById(R.id.rb_star);
 			holder.img=(ImageView) convertView.findViewById(R.id.iv_image);
 			holder.tvShopName=(TextView) convertView.findViewById(R.id.tv_shopname);
 			holder.tvBagWash=(TextView) convertView.findViewById(R.id.tv_bagwash_text);

@@ -72,6 +72,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	boolean isDefaultList=true;
 	//每次加载 curPage+1
 	int curPage=1;
+	int time;
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
@@ -220,23 +221,8 @@ public class IndexFragment extends Fragment implements OnClickListener {
 					}
 				}
 
-				lv.setAdapter(new BusinessListAdapter(bs,context,queue));
-				lv.setOnScrollListener(new OnScrollListener() {
-					
-					@Override
-					public void onScrollStateChanged(AbsListView view, int scrollState) {
-						// TODO Auto-generated method stub
-						fixListViewHeight(lv);
-					}
-					
-					@Override
-					public void onScroll(AbsListView view, int firstVisibleItem,
-							int visibleItemCount, int totalItemCount) {
-						// TODO Auto-generated method stub
-						
-					}
-				});
-				
+				lv.setAdapter(new BusinessListAdapter(bs,context));
+				fixListViewHeight(lv);
 			}
 		});
 	}
@@ -281,8 +267,9 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	            View listViewItem = listAdapter.getView(index , null, listView);  
 	            // 计算子项View 的宽高   
 	            listViewItem.measure(0, 0);    
-	            // 计算所有子项的高度和
-	            totalHeight += listViewItem.getMeasuredHeight();    
+	            // 计算所有子项的高度和,
+	            totalHeight += listViewItem.getMeasuredHeight();  
+	            Log.i("fixList", len+"");
 	        }   
 	   
 	        ViewGroup.LayoutParams params = listView.getLayoutParams();   
@@ -296,14 +283,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	 public void initHeader(){
 		 	ScrollView sv =(ScrollView) getView().findViewById(R.id.scrollView1);
 		 	
-		 	sv.setOnTouchListener(new OnTouchListener() {
-				
-				@Override
-				public boolean onTouch(View v, MotionEvent event) {
-					// TODO Auto-generated method stub
-					return false;
-				}
-			});
+		 	
 	 }
 	 
 	 

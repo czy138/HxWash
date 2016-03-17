@@ -10,10 +10,12 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
         android:src="@drawable/ic_launcher"
        />
 
@@ -21,9 +23,8 @@
         android:id="@+id/tv_shopname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="14dp"
-        android:layout_toRightOf="@+id/iv_image"
+        android:layout_alignTop="@+id/iv_image"
+ 		android:layout_toRightOf="@+id/tv_bagwash_text"
         android:text="来福洗衣店"
         android:textColor="#3F3F3F"
         android:textSize="14sp" />
@@ -33,21 +34,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_image"
-        android:layout_alignLeft="@+id/ratingBar1"
+        android:layout_alignLeft="@+id/rb_star"
         android:text="起送价"
         android:textColor="#7B7B7B"
         android:textSize="12sp" />
-
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        style="@style/MyRatingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_money"
-        android:layout_alignLeft="@+id/tv_shopname"
-        android:numStars="5"
-        android:rating="5"
-        android:stepSize="0.5" />
+ 	<RatingBar
+ 		android:id="@+id/rb_star"
+ 		style="@style/MyRatingBar"
+ 		android:layout_width="50dp"
+ 		android:layout_height="15dp"
+ 	    android:layout_below="@+id/tv_shopname"
+ 		android:layout_alignLeft="@+id/tv_shopname"
+ 		android:layout_marginTop="10dp"
+ 		android:numStars="3"
+ 		android:rating="5"
+ 		android:stepSize="1" />
+ 
 
     <TextView
         android:id="@+id/tv_money"
@@ -60,36 +62,31 @@
         android:textColor="#F75E5E"
         android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/tv_bag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/iv_image"
-        android:text="一"
-        android:textSize="10sp" 
-        android:textColor="#FFF"
-        android:background="@drawable/shop_list_bag_style"
-        android:layout_marginTop="8dp"
+    
+ 	<ImageView
+ 		android:id="@+id/tv_bag"
+ 		android:layout_width="16dp"
+ 		android:layout_height="16dp"
+ 		android:layout_below="@+id/iv_image"
+ 		android:layout_alignParentLeft="true"
+ 		android:layout_marginTop="8dp"
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
-        />
+        android:layout_marginLeft="15dp"
+ 		android:src="@drawable/yi" />    
 
-    <TextView
+
+    <ImageView
         android:id="@+id/tv_urgent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_bag"
-        android:background="@drawable/shop_list_urgent_style"
-        android:text="急"
-        android:textColor="#FFF"
-        android:textSize="10sp"
         android:layout_marginTop="4dp"
         android:paddingLeft="1dp"
         android:paddingRight="1dp"
-       
-        
+       android:layout_marginLeft="15dp"
+        android:src="@drawable/ji"
          />
 
     <TextView
@@ -104,16 +101,6 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/tv_bagwash_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_urgent"
-        android:layout_alignLeft="@+id/tv_urgent_text"
-        android:text="本店支持一袋洗服务"
-        android:textColor="#B3B3B3"
-        android:textSize="10sp" />
-
-    <TextView
         android:id="@+id/tv_urgent_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -122,6 +109,7 @@
         android:layout_toRightOf="@+id/tv_urgent"
         android:text="本店支持加急洗服务"
         android:textColor="#B3B3B3"
+        android:layout_marginBottom="1dp"
         android:textSize="10sp"
         android:layout_marginLeft="5dp" />
  		<View
@@ -129,5 +117,17 @@
  		    android:layout_below="@+id/tv_urgent_text"
 	        android:layout_gravity="center_vertical"
 	        style="@style/item_line"
-        />		
+        />
+
+ 		<TextView
+ 		    android:id="@+id/tv_bagwash_text"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_above="@+id/tv_urgent"
+ 		    android:layout_alignLeft="@+id/tv_urgent_text"
+ 		    android:layout_marginBottom="1dp"
+ 		    android:text="本店支持一袋洗服务"
+ 		    android:textColor="#B3B3B3"
+ 		    android:textSize="10sp" />
+		
 </RelativeLayout>

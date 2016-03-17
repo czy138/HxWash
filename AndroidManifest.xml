@@ -63,17 +63,15 @@
         <activity
             android:name=".BusinessDetailsActivity"
             android:label="@string/title_activity_business_details" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>  
         </activity>
         <activity
             android:name=".IndexActivity"
             android:label="@string/title_activity_index" >
-	
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".AddressActivity"
@@ -98,7 +96,10 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
-                      
+        </activity>
+        <activity
+            android:name=".ChosePayTypeActivity"
+            android:label="@string/title_activity_chose_pay_type" >
         </activity>
     </application>
 

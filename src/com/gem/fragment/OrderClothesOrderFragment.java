@@ -83,7 +83,6 @@ public class OrderClothesOrderFragment extends Fragment {
 		String url = "http://"+Content.getIp()+":8080/HXXa/OrdersListServlet";
 		HttpUtils http = new HttpUtils();
 		RequestParams params = new RequestParams();
-		Toast.makeText(getActivity(), userId+"", 1).show();
 		params.addQueryStringParameter("userId",String.valueOf(userId));
 		params.addQueryStringParameter("curPage",String.valueOf(curPage));
 		http.send(HttpMethod.GET, url,params, new RequestCallBack<String>() {
@@ -100,7 +99,6 @@ public class OrderClothesOrderFragment extends Fragment {
 				Type type =	new TypeToken<List<Orders>>() {  
                 }.getType();
 				Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create();
-				Log.i("OrderList", arg0.result);
 				lists = gson.fromJson(arg0.result,type);	
 				initEvent(lists);
 			}
