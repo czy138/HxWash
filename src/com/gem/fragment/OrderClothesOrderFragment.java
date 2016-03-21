@@ -2,9 +2,14 @@ package com.gem.fragment;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,12 +17,20 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gem.entity.OrderStatus;
 import com.gem.entity.Orders;
+import com.gem.entity.User;
+import com.gem.hxwasha.PaymentActivity;
 import com.gem.hxwasha.R;
 import com.gem.util.CommonAdapter;
 import com.gem.util.Content;
@@ -38,7 +51,7 @@ public class OrderClothesOrderFragment extends Fragment {
 	ListView lvOrder;
 	List<Orders> lists;
 	int curPage=1;
-	int userId=-1;
+	User user;
 	Context context;
 	ImageUtil imageUtil;
 	@Override
@@ -48,14 +61,36 @@ public class OrderClothesOrderFragment extends Fragment {
 				View v =inflater.inflate(R.layout.fragment_order_clothes_order, container,false);
 				imageUtil = new ImageUtil(getActivity());
 				shared= getActivity().getApplicationContext().getSharedPreferences("user",Context.MODE_PRIVATE);
-				userId = shared.getInt("LoginUser", -1);
-				userId=1;
-				getOrdersList();
-						return v;
+				String userStr = shared.getString("loginUser", null);
+//				if(userStr!=null){
+//					Type type = new TypeToken<User>(){}.getType();
+//					Gson gson = new Gson();
+//					user = gson.fromJson(userStr, type);
+//					getOrdersList();
+//				}else{
+					//测试用
+					user = new User();
+					user.setUserId(1);
+					getOrdersList();
+//				}
+			
+				return v;
 	}
 
 	public void initView() {
 		lvOrder=(ListView) getView().findViewById(R.id.lv_order);
+		lvOrder.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				//点击跳转订单详情
+//				Intent intent = new Intent();
+				Toast.makeText(getActivity(), "onItemClick", 1).show();
+			}
+			
+		});
 	}
 	
 	public void initData() {
@@ -75,15 +110,76 @@ public class OrderClothesOrderFragment extends Fragment {
 				.setText(R.id.tv_wash_price, String.valueOf(item.getTotal()))
 				.setText(R.id.tv_wash_order_time, sdf.format(item.getOrderTime()))
 				.setText(R.id.tv_wash_order_address,item.getAddress().getUserAddress());
+				initButton(item, helper);
 			}
 		});
+	}
+	
+	@SuppressLint("NewApi") public void initButton(Orders item,ViewHolder helper){
+		Button left =helper.getView(R.id.btn_wash_order_evaluate);
+		Button right =helper.getView(R.id.btn_reorder);
+		TextView status = helper.getView(R.id.tv_evaluate_state);
+		TextView shop = helper.getView(R.id.tv_wash_store_name);
+		OrderButtonListener listener = new OrderButtonListener(item,left,right,status);
+		left.setOnClickListener(listener);
+		right.setOnClickListener(listener);
+		shop.setOnClickListener(listener);
+		left.setTag("left");
+		right.setTag("right");
+		shop.setTag("shop");
+		//两个按钮的默认状态
+		showOrders(item,left,right,status);
+	}
+	@SuppressLint("NewApi") public void showOrders(Orders item,Button left,Button right,TextView status){
+		left.setVisibility(View.INVISIBLE);
+		right.setVisibility(View.VISIBLE);
+		right.setBackground(getResources().getDrawable(R.drawable.white_shape_btn));
+		switch(item.getOrderStatus()){
+		case PAYNO:
+			status.setText("待付款");
+			left.setVisibility(View.VISIBLE);
+			left.setBackground(getResources().getDrawable(R.drawable.white_shape_btn));
+			left.setText("取消订单");
+			right.setText("付款");
+			break;
+		case GETNO:
+			status.setText("待取衣");
+			right.setBackground(getResources().getDrawable(R.drawable.shape_btn_gray));
+			right.setText("等待上门");
+			break;
+		case SERVICE:
+			status.setText("服务中");
+			right.setText("确认收衣");
+			break;
+		case DONE:
+			status.setText("已完成");
+			left.setVisibility(View.VISIBLE);
+			left.setBackground(getResources().getDrawable(R.drawable.shape_btn));
+			left.setText("评价订单");
+			right.setText("再来一单");
+			break;
+		case PAYED:
+			status.setText("已付款");
+			right.setBackground(getResources().getDrawable(R.drawable.shape_btn_gray));
+			right.setText("等待接单");
+			break;
+		case CANCEL:
+			status.setText("已取消");
+			right.setVisibility(View.INVISIBLE);
+			break;
+		case DISCUSSS:
+			status.setText("已评价");
+			right.setText("再来一单");
+			break;
+		}
 	}
 	//http://10.201.1.3:8080/HXXa/OrdersListServlet
 	public void getOrdersList(){
 		String url = "http://"+Content.getIp()+":8080/HXXa/OrdersListServlet";
 		HttpUtils http = new HttpUtils();
+		Log.i("getOrderList", "userId"+user.getUserId());
 		RequestParams params = new RequestParams();
-		params.addQueryStringParameter("userId",String.valueOf(userId));
+		params.addQueryStringParameter("userId",String.valueOf(user.getUserId()));
 		params.addQueryStringParameter("curPage",String.valueOf(curPage));
 		http.send(HttpMethod.GET, url,params, new RequestCallBack<String>() {
 
@@ -104,12 +200,99 @@ public class OrderClothesOrderFragment extends Fragment {
 			}
 		});
 	}
+	
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		initView();
 		initData();
+	}
+	
+	class OrderButtonListener implements OnClickListener{
+		private Orders item;
+		private Button left;
+		private Button right;
+		private TextView status;
+		
+		public OrderButtonListener(Orders item,Button left,Button right,TextView status) {
+			super();
+			this.item = item;
+			this.left = left;
+			this.right = right;
+			this.status = status;
+		}
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch((String)v.getTag()){
+			case "left":
+				switch(item.getOrderStatus()){
+				case PAYNO:
+					//取消订单
+					item.setOrderStatus(OrderStatus.CANCEL);
+					chageOrderStatus(item,left,right,status);
+					break;
+				case DONE:
+					//评价订单
+					break;
+				}
+				break;
+			case "right":
+				switch(item.getOrderStatus()){
+				case PAYNO:
+					//付款
+					Intent intent = new Intent(getActivity(),PaymentActivity.class);
+					intent.putExtra("orders", item);
+					//跳回来后刷新列表，或者修改该item的按钮
+					startActivityForResult(intent, Activity.RESULT_FIRST_USER);
+					break;
+				case SERVICE:
+					//确认收衣
+					item.setOrderStatus(OrderStatus.DONE);
+					item.setSentTime(new Date());
+					chageOrderStatus(item,left,right,status);
+					break;
+				case DONE:
+					//再来一单
+					break;
+				case DISCUSSS:
+					//再来一单
+					break;
+				}
+				break;
+			case "shop":
+				//跳转洗衣店
+				Toast.makeText(getActivity(), "shop:"+item.getOrderId(), 1).show();
+				break;
+			}
+		}
+		
+	}
+	
+	public void chageOrderStatus(final Orders item,final Button left,final Button right,final TextView status){
+		Gson gson= new GsonBuilder().setDateFormat("yyy-MM-dd HH:mm:ss").create();
+		String order=gson.toJson(item);
+		
+		String url ="http://"+Content.getIp()+":8080/HXXa/ChangeOrderStatusServlet";
+		HttpUtils http = new HttpUtils();
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("order",order);
+		http.send(HttpMethod.GET, url,params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				showOrders(item,left,right,status);
+			}
+		});
 		
 	}
 	

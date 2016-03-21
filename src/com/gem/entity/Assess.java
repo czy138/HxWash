@@ -1,8 +1,13 @@
 package com.gem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Assess {
+public class Assess implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int assessId;
 	private User user;
 	private Business business;

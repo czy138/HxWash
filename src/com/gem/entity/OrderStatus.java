@@ -1,8 +1,10 @@
 package com.gem.entity;
 
-public enum OrderStatus {
+import java.io.Serializable;
+
+public enum OrderStatus implements Serializable{
 	//待付款，待取衣，服务中，已完成，已取消
-	PAYNO(1,"待付款"),GETNO(2,"待取衣"),SERVICE(3,"服务中"),DONE(4,"已完成"),CANCEL(5,"已取消"),PAYED(6,"已付款");
+	PAYNO(1,"待付款"),GETNO(2,"待取衣"),SERVICE(3,"服务中"),DONE(4,"已完成"),CANCEL(5,"已取消"),PAYED(6,"已付款"),DISCUSSS(7,"已评论");
 	private int statusId;
 	private String orderStatus;	
 	public static OrderStatus valueOf(int statusId){
@@ -19,6 +21,8 @@ public enum OrderStatus {
 			return OrderStatus.valueOf("CANCEL");
 		case 6:
 			return OrderStatus.valueOf("PAYED");
+		case 7:
+			return OrderStatus.valueOf("DISCUSSS");
 		default:
 			return null;
 		}

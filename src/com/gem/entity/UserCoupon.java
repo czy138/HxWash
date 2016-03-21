@@ -1,8 +1,13 @@
 package com.gem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserCoupon {
+public class UserCoupon implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int userCouponId;
 	private Coupon coupon;
 	private User user;

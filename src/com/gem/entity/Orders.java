@@ -1,8 +1,13 @@
 package com.gem.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Orders {
+public class Orders implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int orderId;
 	private User user;
 	private OrderStatus orderStatus;

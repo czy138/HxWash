@@ -27,5 +27,6 @@
     <string name="pay_zfb">支付宝</string>
     <string name="title_activity_pay_account">PayAccountActivity</string>
     <string name="title_activity_pay">PayActivity</string>
+    <string name="title_activity_payment">PaymentActivity</string>
 
 </resources>

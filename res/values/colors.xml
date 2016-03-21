@@ -4,4 +4,6 @@
     <color name="big_line_clo">#EFEFEF</color>
     <color name="little_line_clo">#666666</color>
     <color name="list_tital">#000000</color>
+    <color name="text_yellow">#744000</color>
+    <color name="btn_yellow">#fdcf19</color>
 </resources>

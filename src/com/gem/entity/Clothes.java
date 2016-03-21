@@ -1,6 +1,12 @@
 package com.gem.entity;
 
-public class Clothes {
+import java.io.Serializable;
+
+public class Clothes implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//一袋洗是一种衣物，id=0
 	private int clothesId;
 	private Business business;

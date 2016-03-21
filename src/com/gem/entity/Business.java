@@ -1,6 +1,12 @@
 package com.gem.entity;
 
-public class Business {
+import java.io.Serializable;
+
+public class Business implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int businessId;
 	private String shopName;
 	private String imgesUrl;
