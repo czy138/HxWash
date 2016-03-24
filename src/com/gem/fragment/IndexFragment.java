@@ -4,6 +4,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,19 +25,25 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.gem.adapter.BusinessListAdapter;
 import com.gem.entity.Business;
+import com.gem.hxwasha.BusinessDetailsActivity;
 import com.gem.hxwasha.BusinessListActivity;
 import com.gem.hxwasha.R;
+import com.gem.hxwasha.ReceiveYHQActivity;
+import com.gem.hxwasha.UrgentAndBagListActivity;
 import com.gem.util.Content;
 import com.gem.util.LocationUtil;
 import com.gem.util.SingleRequestQueue;
@@ -62,7 +70,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	
 	Activity context;
 	RequestQueue queue;
-	
+	BusinessListAdapter adapter;
 	SharedPreferences locationSave;
 	
 	LocationUtil locationUtil;
@@ -129,6 +137,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 		views.add(v2);
 		views.add(v3);
 		
+
 		vpIndex.setAdapter(new PagerAdapter() {
 			
 			@Override
@@ -154,10 +163,20 @@ public class IndexFragment extends Fragment implements OnClickListener {
 			public Object instantiateItem(ViewGroup container, int position) {
 				// TODO Auto-generated method stub
 				container.addView(views.get(position));
+				views.get(position).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						Intent intent = new Intent(getActivity(),ReceiveYHQActivity.class);
+						startActivity(intent);
+					}
+				});
 				return views.get(position);
 			}
 			
 		});
+	
 	}
 	
 	public List<Business> initData(){
@@ -185,21 +204,17 @@ public class IndexFragment extends Fragment implements OnClickListener {
 		HttpUtils http = new HttpUtils();
 		RequestParams params = new RequestParams();
 		params.addHeader("name", "value");
-		if(isDefaultList){
-			params.addQueryStringParameter("from","indexDefault");
 			params.addQueryStringParameter("curPage", curPage+"");
-			
-		}else{
-			params.addQueryStringParameter("from","indexByLocation");
-			//定位后改变indexByLocation的值，定位信息存入手机本地，发到后台，后台保存定位信息
-			//当 from的值为indexByLocation时返回相应的List
-		}
+			params.addQueryStringParameter("lat",lat+"");
+			params.addQueryStringParameter("lng",lng+"");
+			params.addQueryStringParameter("washType","mashine");
+			params.addQueryStringParameter("clothesType","clothes");
 		http.send(HttpMethod.GET,url,params, new RequestCallBack<String>() {
 
 			@Override
 			public void onFailure(HttpException arg0, String arg1) {
 				// TODO Auto-generated method stub
-				
+				Log.i("httpFailure","IndexFragment");
 			}
 
 			@Override
@@ -207,7 +222,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 				// TODO Auto-generated method stub
 				Type type =	new TypeToken<List<Business>>() {  
                 }.getType();
-				Gson gson = new Gson();
+				Gson gson = new Gson(); 
 				bs = gson.fromJson(arg0.result,type);
 				//当第一次显示时，加入用户消费较多的商家
 				if(curPage==1){
@@ -220,8 +235,24 @@ public class IndexFragment extends Fragment implements OnClickListener {
 						bs=temp;
 					}
 				}
-
-				lv.setAdapter(new BusinessListAdapter(bs,context));
+				if(lv.getAdapter()!=null){
+					adapter.notifyDataSetChanged();
+				}{
+					adapter=new BusinessListAdapter(bs,context);
+					lv.setAdapter(adapter);
+					
+					lv.setOnItemClickListener(new OnItemClickListener() {
+	
+								@Override
+								public void onItemClick(AdapterView<?> parent,
+										View view, int position, long id) {
+									// TODO Auto-generated method stub
+									Intent intent = new Intent(context,BusinessDetailsActivity.class);
+									intent.putExtra("businessId", bs.get(position).getBusinessId());
+									startActivity(intent);
+								}
+					});
+				}
 				fixListViewHeight(lv);
 			}
 		});
@@ -236,48 +267,51 @@ public class IndexFragment extends Fragment implements OnClickListener {
 		}else{
 			Intent intent=null;
 			Bundle bundle = new Bundle();
-			bundle.putBoolean("isDefault", isDefaultList);
 			switch(v.getId()){
 			case R.id.rl_index_fr_button_wash:
 				intent = new Intent(context,BusinessListActivity.class);
-				bundle.putString("busiType", "wash");
 				break;
 			case R.id.rl_index_fr_button_bagwash:
+				intent = new Intent(context,UrgentAndBagListActivity.class);
 				bundle.putString("busiType", "bagwash");
 				break;
 			case R.id.rl_index_fr_button_urgent:
+				intent = new Intent(context,UrgentAndBagListActivity.class);
 				bundle.putString("busiType", "urgent");
 				break;
 			}
-			intent.putExtras(bundle);
-			startActivity(intent);
+			if(intent!=null){
+				intent.putExtras(bundle);
+				startActivity(intent);
+			}
 		}
 			//跳转到商城
 			//Intent intent = new Intent(context,BusinessListActivity.class);
 	} 
 	
-	 public void fixListViewHeight(ListView listView) {   
-	        // 如果没有设置数据适配器，则ListView没有子项，返回。  
-	        ListAdapter listAdapter = listView.getAdapter();  
-	        int totalHeight = 0;   
-	        if (listAdapter == null) {   
-	            return;   
-	        }   
-	        for (int index = 0, len = listAdapter.getCount(); index < len; index++) {     
-	            View listViewItem = listAdapter.getView(index , null, listView);  
-	            // 计算子项View 的宽高   
-	            listViewItem.measure(0, 0);    
-	            // 计算所有子项的高度和,
-	            totalHeight += listViewItem.getMeasuredHeight();  
-	            Log.i("fixList", len+"");
-	        }   
-	   
-	        ViewGroup.LayoutParams params = listView.getLayoutParams();   
-	        // listView.getDividerHeight()获取子项间分隔符的高度   
-	        // params.height设置ListView完全显示需要的高度    
-	        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));   
-	        listView.setLayoutParams(params);   
-	    }
+	public void fixListViewHeight(ListView listView) {   
+        // 如果没有设置数据适配器，则ListView没有子项，返回。  
+        ListAdapter listAdapter = listView.getAdapter();  
+        int totalHeight = 0;   
+        if (listAdapter == null) {   
+            return;   
+        }   
+        for (int index = 0, len = listAdapter.getCount(); index < len; index++) {     
+            View listViewItem = listAdapter.getView(index , null, listView);  
+            // 计算子项View 的宽高   
+            listViewItem.measure(0, 0);    
+            // 计算所有子项的高度和
+            totalHeight += listViewItem.getMeasuredHeight();  
+            Log.i("fixList", len+"");
+        }   
+   
+        ViewGroup.LayoutParams params = listView.getLayoutParams();   
+//         listView.getDividerHeight()获取子项间分隔符的高度   
+        // params.height设置ListView完全显示需要的高度    
+        params.height = totalHeight+ (listView.getDividerHeight() * (listAdapter.getCount() - 1));   
+        listView.setLayoutParams(params);   
+    }
+
 	 
 
 	 public void initHeader(){
@@ -309,6 +343,7 @@ public class IndexFragment extends Fragment implements OnClickListener {
 	                Log.i("LocationError", "无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
 	            }
 	            tvLocation.setText(address); //结果显示在UI上
+	            getList();
 	            //定位结果写入sharePreferense
 	            Editor edit =locationSave.edit();
 	            edit.putString("lat", String.valueOf(lat));

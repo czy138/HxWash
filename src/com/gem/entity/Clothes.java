@@ -47,5 +47,11 @@ public class Clothes implements Serializable{
 	public void setClothesType(ClothesType clothesType) {
 		this.clothesType = clothesType;
 	}
+	@Override
+	public String toString() {
+		return "Clothes [clothesId=" + clothesId + ", business=" + business
+				+ ", clothesName=" + clothesName + ", clothesType="
+				+ clothesType + ", clothesImg=" + clothesImg + "]";
+	}
 	
 }

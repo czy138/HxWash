@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.gem.adapter.AddressAdapter;
@@ -34,6 +38,17 @@ public class AddressActivity extends Activity {
 		ViewUtils.inject(this);
 		ads= new ArrayList<Address>();
 		getAddressLsit();
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long arg3) {
+				Intent intent = new Intent(AddressActivity.this,ConfirmOrderActivity.class);
+				intent.putExtra("addressIndex", position);
+				setResult(RESULT_OK,intent);
+				finish();
+			}
+		});
+
 	}
 	
 	public void getAddressLsit(){

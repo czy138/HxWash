@@ -42,5 +42,10 @@ public class Address implements Serializable{
 	public void setUserAddress(String userAddress) {
 		this.userAddress = userAddress;
 	}
+	@Override
+	public String toString() {
+		return userAddress ;
+	}
+
 
 }

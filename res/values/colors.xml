@@ -2,8 +2,15 @@
 <resources>
     <color name="activity_background_white">#FFFFFF</color>
     <color name="big_line_clo">#EFEFEF</color>
-    <color name="little_line_clo">#666666</color>
+    <color name="little_line_clo">#CCCCCC</color>
     <color name="list_tital">#000000</color>
     <color name="text_yellow">#744000</color>
     <color name="btn_yellow">#fdcf19</color>
+    
+    <drawable name="black">#333333</drawable>
+    <drawable name="blue">#4EBFFB</drawable>
+    <drawable name="gray">#999999</drawable>
+    <drawable name="background">#F2F2F2</drawable>
+    <drawable name="viewcolor">#FFFFFF</drawable>
+    <drawable name="red">#FF0000</drawable>
 </resources>

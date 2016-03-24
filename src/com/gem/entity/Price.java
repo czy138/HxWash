@@ -43,5 +43,11 @@ public class Price {
 	public void seteTime(int eTime) {
 		this.eTime = eTime;
 	}
+	@Override
+	public String toString() {
+		return "Price [priceId=" + priceId + ", clothes=" + clothes
+				+ ", washType=" + washType + ", price=" + price + ", urgent="
+				+ urgent + ", eTime=" + eTime + "]";
+	}
 	
 }

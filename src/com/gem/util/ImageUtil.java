@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.lidroid.xutils.BitmapUtils;
@@ -39,10 +40,13 @@ public class ImageUtil {
 		Bitmap bitmapDisk = getBitmapFromDiskLruCache(url);
 		if(bitmap!=null){
 			v.setImageBitmap(bitmap);
+			Log.i("ImageUtil", "lru");
 		}else if(bitmapDisk!=null){    
 			v.setImageBitmap(bitmapDisk);
+			Log.i("ImageUtil", "disk");
 		}else{
 			getImageFromNet(url,v);
+			Log.i("ImageUtil", "net");
 		}
 		getImageFromNet(url,v);
 	}
@@ -50,7 +54,6 @@ public class ImageUtil {
 	//œ¬‘ÿÕº∆¨
 	public void getImageFromNet(final String url,final ImageView view){
 		BitmapUtils utils = new BitmapUtils(context);  
-	 
 		utils.display(view, url);  
 	}
 	

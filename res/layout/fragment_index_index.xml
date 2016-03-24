@@ -26,7 +26,7 @@
                 android:layout_centerVertical="true"
                 android:text="定位"
                 android:textColor="#744000"
-                android:textSize="20sp" />
+                android:textSize="14sp" />
 
         </RelativeLayout>
         <RelativeLayout
@@ -34,6 +34,7 @@
            android:layout_width="wrap_content"
            android:layout_height="match_parent"
            android:layout_below="@+id/rel_title"
+           android:layout_marginBottom="5dp"
            android:gravity="center" >
 			    <android.support.v4.view.ViewPager
 			        android:id="@+id/index_index_viewpage"
@@ -61,12 +62,22 @@
                 android:layout_weight="1"
                 android:gravity="center" >
 
-                <ImageButton
-                    android:id="@+id/imageButton1"
+                <ImageView
+                    android:id="@+id/iv_wash"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/hx_wash" 
+                    />
+                <TextView 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_below="@+id/iv_wash"
+                    android:layout_alignLeft="@+id/iv_wash"
+                    android:layout_alignRight="@+id/iv_wash"
+                    android:gravity="center"
+                    android:text="浣熊洗"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -76,12 +87,22 @@
                 android:layout_weight="1"
                 android:gravity="center" >
 
-                <ImageButton
-                    android:id="@+id/imageButton2"
+                 <ImageView
+                    android:id="@+id/iv_yi_dai"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/yi_dai" 
+                    />
+                <TextView 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_below="@+id/iv_yi_dai"
+                    android:layout_alignLeft="@+id/iv_yi_dai"
+                    android:layout_alignRight="@+id/iv_yi_dai"
+                    android:gravity="center"
+                    android:text="一袋洗"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -91,12 +112,22 @@
                 android:layout_weight="1"
                 android:gravity="center" >
 
-                <ImageButton
-                    android:id="@+id/imageButton3"
+                <ImageView
+                    android:id="@+id/iv_jiaji"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/jia_ji" 
+                    />
+                <TextView 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_below="@+id/iv_jiaji"
+                    android:layout_alignLeft="@+id/iv_jiaji"
+                    android:layout_alignRight="@+id/iv_jiaji"
+                    android:gravity="center"
+                    android:text="加急洗"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
@@ -106,12 +137,22 @@
                 android:layout_weight="1"
                 android:gravity="center" >
 
-                <ImageButton
-                    android:id="@+id/imageButton4"
+                    <ImageView
+                    android:id="@+id/iv_shop"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/shop_store" 
+                    />
+                <TextView 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_below="@+id/iv_shop"
+                    android:layout_alignLeft="@+id/iv_shop"
+                    android:layout_alignRight="@+id/iv_shop"
+                    android:gravity="center"
+                    android:text="穿新衣"
+                    />
             </RelativeLayout>
         </LinearLayout>
         <!-- 附近商家 -->
@@ -120,6 +161,7 @@
             android:id="@+id/ll_index_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/ll_four_button"
             android:orientation="vertical" >
 

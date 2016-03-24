@@ -4,12 +4,39 @@
     android:layout_height="match_parent"
     android:background="@color/activity_background_white"
     tools:context="com.gem.hxwasha.BusinessListActivity" >
+    <!-- 标题 -->
+    <RelativeLayout
+            android:id="@+id/rel_title"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="#FFFFFF" >
 
+            <TextView
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="浣熊洗"
+                android:textSize="18sp" />
+
+            
+        </RelativeLayout>
+        
+    	<View 
+    	    android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/rel_title"
+            android:background="#e4e4e4"/>
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true" >
+        android:layout_below="@+id/view"
+        >
 
         <RelativeLayout
             android:id="@+id/rl_business_list_clothes"

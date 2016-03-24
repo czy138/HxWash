@@ -29,6 +29,7 @@ import com.lidroid.xutils.view.annotation.ViewInject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -36,9 +37,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class BusinessListActivity extends Activity implements OnClickListener,OnPullListener {
 	@ViewInject(R.id.lv_business_list_activity)
@@ -52,56 +56,54 @@ public class BusinessListActivity extends Activity implements OnClickListener,On
 	public static final int ADDLIST=0;
 	public static final int REPLAYCE=1;
 	List<NameValuePair> parmasList;
-	Handler handler=new Handler();
 	Context context = this;
 	List<Business> bs;
 	int curPage=1;
 	int preCount=0;
 	
+	double lat;
+	double lng;
+	
 	BusinessListAdapter adapter;
-	String busiType;
 	String clothes;
 	String wash;
 	
-	RequestQueue queue;
 	List<Business> preList=new ArrayList<Business>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_business_list);
 		ViewUtils.inject(this);
 		clothes="clothes";
 		wash ="mashine";
+		lat=0;
+		lng=0;
 		parmasList = new ArrayList<NameValuePair>();
 		initEvent();
-		busiType =(String) getIntent().getExtras().get("busiType");
-		queue=SingleRequestQueue.getRequestQueue(this);
-		switch(busiType){
-		case "wash":
-			parmasList.add(new BasicNameValuePair("from","wash"));
-			parmasList.add(new BasicNameValuePair("curPage",curPage+""));
-			parmasList.add(new BasicNameValuePair("clothesType",clothes));
-			parmasList.add(new BasicNameValuePair("washType",wash));
-			
-			break;
-		case "bagwash":
-			//只支持衣物，机洗
-			parmasList.add(new BasicNameValuePair("from","bagwash"));
-			break;
-		case "urgent":
-			//只支持衣物
-			parmasList.add(new BasicNameValuePair("from","urgent"));
-			
-			break;
-		}
+		parmasList.add(new BasicNameValuePair("curPage",curPage+""));
+		parmasList.add(new BasicNameValuePair("clothesType",clothes));
+		parmasList.add(new BasicNameValuePair("washType",wash));
+		parmasList.add(new BasicNameValuePair("lat",lat+""));
+		parmasList.add(new BasicNameValuePair("lng",lng+""));
 		getList(parmasList,true,-1);
-		
 	}
 	public void initEvent(){
 		rlClothes.setOnClickListener(this);
 		rlLuxury.setOnClickListener(this);
 		rlBed.setOnClickListener(this);
 		lv.setOnPullListener(this);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					View view, int position, long id) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(context,BusinessDetailsActivity.class);
+				intent.putExtra("businessId", bs.get(position-1).getBusinessId());
+				startActivity(intent);
+			}
+		});
 	}
 	@Override
 	public void onClick(View v) {
@@ -110,28 +112,31 @@ public class BusinessListActivity extends Activity implements OnClickListener,On
 		case R.id.rl_business_list_clothes:
 			clothes="clothes";
 			parmasList.clear();
-			parmasList.add(new BasicNameValuePair("from","wash"));
 			parmasList.add(new BasicNameValuePair("curPage",curPage+""));
 			parmasList.add(new BasicNameValuePair("clothesType",clothes));
 			parmasList.add(new BasicNameValuePair("washType",wash));
+			parmasList.add(new BasicNameValuePair("lat",lat+""));
+			parmasList.add(new BasicNameValuePair("lng",lng+""));
 			getList(parmasList,false,REPLAYCE);
 			break;
 		case R.id.rl_business_list_luxury:
 			clothes="luxury";
 			parmasList.clear();
-			parmasList.add(new BasicNameValuePair("from","wash"));
 			parmasList.add(new BasicNameValuePair("curPage",curPage+""));
 			parmasList.add(new BasicNameValuePair("clothesType",clothes));
 			parmasList.add(new BasicNameValuePair("washType",wash));
+			parmasList.add(new BasicNameValuePair("lat",lat+""));
+			parmasList.add(new BasicNameValuePair("lng",lng+""));
 			getList(parmasList,false,REPLAYCE);
 			break;
 		case R.id.rl_business_list_bed:
 			clothes="bed";
 			parmasList.clear();
-			parmasList.add(new BasicNameValuePair("from","wash"));
 			parmasList.add(new BasicNameValuePair("curPage",curPage+""));
 			parmasList.add(new BasicNameValuePair("clothesType",clothes));
 			parmasList.add(new BasicNameValuePair("washType",wash));
+			parmasList.add(new BasicNameValuePair("lat",lat+""));
+			parmasList.add(new BasicNameValuePair("lng",lng+""));
 			getList(parmasList,false,REPLAYCE);
 			break;
 		}
@@ -200,31 +205,24 @@ public class BusinessListActivity extends Activity implements OnClickListener,On
 		//定位
 		curPage=1;
 		parmasList.clear();
-		parmasList.add(new BasicNameValuePair("from",busiType));
 		parmasList.add(new BasicNameValuePair("curPage",curPage+""));
 		parmasList.add(new BasicNameValuePair("clothesType",clothes));
 		parmasList.add(new BasicNameValuePair("washType",wash));
+		parmasList.add(new BasicNameValuePair("lat",lat+""));
+		parmasList.add(new BasicNameValuePair("lng",lng+""));
 		getList(parmasList,false,REPLAYCE);
 	}
 	@Override
 	public void onLoad() {
 		// TODO Auto-generated method stub
-
-		handler.postDelayed(new Runnable() {
-			
-			@Override
-			public void run() {
 				parmasList.clear();
-				parmasList.add(new BasicNameValuePair("from",busiType));
 				parmasList.add(new BasicNameValuePair("curPage",++curPage+""));
 				parmasList.add(new BasicNameValuePair("clothesType",clothes));
 				parmasList.add(new BasicNameValuePair("washType",wash));
+				parmasList.add(new BasicNameValuePair("lat",lat+""));
+				parmasList.add(new BasicNameValuePair("lng",lng+""));
 				getList(parmasList,false,ADDLIST);
 				lv.completePull();
-				
-			}
-		}, 2000);
-		
 	}
 	
 

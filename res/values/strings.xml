@@ -28,5 +28,10 @@
     <string name="title_activity_pay_account">PayAccountActivity</string>
     <string name="title_activity_pay">PayActivity</string>
     <string name="title_activity_payment">PaymentActivity</string>
+    <string name="title_activity_order_dtails">OrderDtailsActivity</string>
+    <string name="title_activity_mall">MallActivity</string>
+    <string name="title_activity_urgent_and_bag_list">UrgentAndBagListActivity</string>
+    <string name="title_activity_receive_yhq">ReceiveYHQActivity</string>
+    <string name="title_activity_user_coupon">UserCouponActivity</string>
 
 </resources>

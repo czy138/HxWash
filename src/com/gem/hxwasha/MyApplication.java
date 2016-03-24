@@ -1,5 +1,6 @@
 package com.gem.hxwasha;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.smssdk.SMSSDK;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -13,5 +14,8 @@ public class MyApplication extends Application {
 		// 在使用 SDK 各组间之前初始化 context 信息，传入 ApplicationContext
 		SDKInitializer.initialize(this);
 		SMSSDK.initSDK(this, "10621829d8b94", "077f0629ff4afe8bbdf87219ddaa16b2");
+		
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(this);
 	}
 }

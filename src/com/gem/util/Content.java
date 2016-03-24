@@ -7,6 +7,11 @@ import java.util.Properties;
 import android.util.Log;
 
 public class Content {
+	public static String MESSAGE_RECEIVED_ACTION="com.czy.orderStatus";
+	public static final String KEY_MESSAGE = "message";
+	public static final String KEY_EXTRAS = "extras";
+	//地球
+	public static double EARTH_RADIUS = 6378.137;
 	//首页分页大小
 	public static final int PAGESIZE=10;
 	//洗衣订单跳转 requestCode

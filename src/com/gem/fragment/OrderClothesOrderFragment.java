@@ -2,14 +2,17 @@ package com.gem.fragment;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,8 +24,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +35,7 @@ import android.widget.Toast;
 import com.gem.entity.OrderStatus;
 import com.gem.entity.Orders;
 import com.gem.entity.User;
+import com.gem.hxwasha.OrderDtailsActivity;
 import com.gem.hxwasha.PaymentActivity;
 import com.gem.hxwasha.R;
 import com.gem.util.CommonAdapter;
@@ -54,6 +60,17 @@ public class OrderClothesOrderFragment extends Fragment {
 	User user;
 	Context context;
 	ImageUtil imageUtil;
+	BaseAdapter adapter;
+	private MessageReceiver mMessageReceiver;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		context=activity;
+		registerMessageReceiver();
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -87,10 +104,12 @@ public class OrderClothesOrderFragment extends Fragment {
 				// TODO Auto-generated method stub
 				//点击跳转订单详情
 //				Intent intent = new Intent();
-				Toast.makeText(getActivity(), "onItemClick", 1).show();
+				Intent intent = new Intent(getActivity(),OrderDtailsActivity.class);
+				startActivity(intent);
 			}
 			
 		});
+		
 	}
 	
 	public void initData() {
@@ -98,12 +117,13 @@ public class OrderClothesOrderFragment extends Fragment {
 	}
 	
 	public void initEvent(List<Orders> list) {
-		lvOrder.setAdapter(new CommonAdapter<Orders>(getActivity(),list,R.layout.order_clothes_listview_item) {
+		
+		adapter=new CommonAdapter<Orders>(getActivity(),list,R.layout.order_clothes_listview_item) {
 
 			@Override
 			public void convert(ViewHolder helper, Orders item) {
 				// TODO Auto-generated method stub
-				SimpleDateFormat sdf = new SimpleDateFormat("yy-MM-dd HH:mm");
+				SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
 				ImageView iv = helper.getView(R.id.iv_wash_store_header);
 				helper
 				.setImageByUrl(R.id.iv_wash_store_header, item.getBusiness().getImgesUrl(),imageUtil)
@@ -112,7 +132,9 @@ public class OrderClothesOrderFragment extends Fragment {
 				.setText(R.id.tv_wash_order_address,item.getAddress().getUserAddress());
 				initButton(item, helper);
 			}
-		});
+		};
+		lvOrder.setAdapter(adapter);
+		
 	}
 	
 	@SuppressLint("NewApi") public void initButton(Orders item,ViewHolder helper){
@@ -295,5 +317,49 @@ public class OrderClothesOrderFragment extends Fragment {
 		});
 		
 	}
+	public void registerMessageReceiver() {
+		mMessageReceiver = new MessageReceiver();
+		IntentFilter filter = new IntentFilter();
+		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		filter.addAction(Content.MESSAGE_RECEIVED_ACTION);
+		context.registerReceiver(mMessageReceiver, filter);
+	}
 	
+	@Override
+	public void onDetach() {
+		// TODO Auto-generated method stub
+		super.onDetach();
+		context.unregisterReceiver(mMessageReceiver);
+	}
+	
+	  public class MessageReceiver extends BroadcastReceiver {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Log.i("HxReceiver", "MessageReceiver");
+				if (Content.MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+//	              String extras = intent.getStringExtra(Content.KEY_EXTRAS);
+				  String messge = intent.getStringExtra(Content.KEY_MESSAGE);
+	              Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+	              Type type = new TypeToken<Orders>(){}.getType();
+	              Toast.makeText(context, messge, 1).show();
+	              Orders order =gson.fromJson(messge, type);
+	              Iterator<Orders> iter = lists.iterator();
+	              while(iter.hasNext()){
+	            	 if(iter.next().getOrderId()==order.getOrderId()){
+	            		 iter.remove();
+	            	 }
+	              }
+	              lists.add(order);
+				  adapter.notifyDataSetChanged();
+						
+				}
+			}
+		}
+	  
+	  public void setCostomMsg(String str){
+		  
+	  }
+	  
+	  
 }

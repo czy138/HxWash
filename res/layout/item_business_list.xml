@@ -6,6 +6,7 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingBottom="5dp"
+    android:descendantFocusability="blocksDescendants"
     >
 
     <ImageView
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_image"
         android:layout_alignLeft="@+id/rb_star"
-        android:text="起送价"
+        android:text="配送费"
         android:textColor="#7B7B7B"
         android:textSize="12sp" />
  	<RatingBar
@@ -49,18 +50,6 @@
  		android:numStars="3"
  		android:rating="5"
  		android:stepSize="1" />
- 
-
-    <TextView
-        android:id="@+id/tv_money"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tv_limit_price"
-        android:layout_alignBottom="@+id/tv_limit_price"
-        android:layout_toRightOf="@+id/tv_limit_price"
-        android:text=""
-        android:textColor="#F75E5E"
-        android:textSize="12sp" />
 
     
  	<ImageView
@@ -90,17 +79,6 @@
          />
 
     <TextView
-        android:id="@+id/tv_yuan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tv_limit_price"
-        android:layout_alignBottom="@+id/tv_limit_price"
-        android:layout_toRightOf="@+id/tv_limit_price"
-        android:text="￥"
-        android:textColor="#F75E5E"
-        android:textSize="12sp" />
-
-    <TextView
         android:id="@+id/tv_urgent_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,12 +90,6 @@
         android:layout_marginBottom="1dp"
         android:textSize="10sp"
         android:layout_marginLeft="5dp" />
- 		<View
- 		    android:layout_marginTop="10dp"
- 		    android:layout_below="@+id/tv_urgent_text"
-	        android:layout_gravity="center_vertical"
-	        style="@style/item_line"
-        />
 
  		<TextView
  		    android:id="@+id/tv_bagwash_text"
@@ -129,5 +101,25 @@
  		    android:text="本店支持一袋洗服务"
  		    android:textColor="#B3B3B3"
  		    android:textSize="10sp" />
+
+ 		<TextView
+ 		    android:id="@+id/tv_yuan"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_above="@+id/tv_bag"
+ 		    android:layout_toRightOf="@+id/tv_limit_price"
+ 		    android:text="￥"
+ 		    android:textColor="#F75E5E"
+ 		    android:textSize="12sp" />
+
+ 		<TextView
+ 		    android:id="@+id/tv_money_send"
+ 		    android:layout_width="wrap_content"
+ 		    android:layout_height="wrap_content"
+ 		    android:layout_above="@+id/tv_bag"
+ 		    android:layout_toRightOf="@+id/rb_star"
+ 		    android:text="0"
+ 		    android:textColor="#F75E5E"
+ 		    android:textSize="12sp" />
 		
 </RelativeLayout>

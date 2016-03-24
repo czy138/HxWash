@@ -16,16 +16,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.gem.fragment.AssessFragment;
-import com.gem.fragment.BusinessDetailsFragment;
+import com.gem.fragment.BusinessAssessFragment;
 import com.gem.fragment.BusinessClothesFragment;
+import com.gem.fragment.BusinessDetailsFragment;
 
 public class BusinessDetailsActivity extends FragmentActivity implements OnPageChangeListener, OnCheckedChangeListener {
 	ViewPager vp;
 	RadioGroup rg;
 	List<Fragment> fragments;
 	
-	AssessFragment assessFragment;
+	BusinessAssessFragment assessFragment;
 	BusinessDetailsFragment detailsFragment;
 	BusinessClothesFragment orderClothesFragment;
 	@Override
@@ -35,9 +35,13 @@ public class BusinessDetailsActivity extends FragmentActivity implements OnPageC
 		vp=(ViewPager) findViewById(R.id.content);
 		rg=(RadioGroup) findViewById(R.id.group);
 		fragments= new ArrayList<Fragment>();
-		assessFragment = new AssessFragment();
+		assessFragment = new BusinessAssessFragment();
 		detailsFragment = new BusinessDetailsFragment();
 		orderClothesFragment= new BusinessClothesFragment();
+		int businessId=getIntent().getIntExtra("businessId",-1);
+		Bundle bundle = new Bundle();
+		bundle.putInt("businessId", businessId);
+		orderClothesFragment.setArguments(bundle);
 		fragments.add(orderClothesFragment);
 		fragments.add(assessFragment);
 		fragments.add(detailsFragment);

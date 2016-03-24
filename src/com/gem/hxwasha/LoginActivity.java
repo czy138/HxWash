@@ -1,9 +1,10 @@
 package com.gem.hxwasha;
 
-import java.lang.reflect.Type;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -21,13 +22,13 @@ import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 
-import com.gem.entity.User;
 import com.gem.util.Content;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.gem.util.JpushUtil;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -46,42 +47,44 @@ public class LoginActivity extends Activity implements OnClickListener {
 	Button requestCodeBtn;
 	@ViewInject(R.id.login_commit_btn)
 	Button commitBtn;
-	
+
 	String phone;
-	int i = 120;//倒计时
-	
+	int i = 60;// 倒计时
+
 	SharedPreferences sharedPreferences;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);   
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 		ViewUtils.inject(this);
-		sharedPreferences=getApplicationContext().getSharedPreferences("user",Context.MODE_PRIVATE);
+		sharedPreferences = getApplicationContext().getSharedPreferences(
+				"user", Context.MODE_PRIVATE);
 		initSMS();
 	}
-	public void initSMS(){
+
+	public void initSMS() {
 		requestCodeBtn.setOnClickListener(this);
 		commitBtn.setOnClickListener(this);
 
-		EventHandler eventHandler = new EventHandler(){
+		EventHandler eventHandler = new EventHandler() {
 
 			@Override
 			public void afterEvent(int event, int result, Object data) {
 				// TODO Auto-generated method stub
-			     Message msg = new Message();  
-	                msg.arg1 = event;  
-	                msg.arg2 = result;  
-	                msg.obj = data;  
-	                handler.sendMessage(msg);
+				Message msg = new Message();
+				msg.arg1 = event;
+				msg.arg2 = result;
+				msg.obj = data;
+				handler.sendMessage(msg);
 			}
-			
+
 		};
-		
-		SMSSDK.registerEventHandler(eventHandler);  
+
+		SMSSDK.registerEventHandler(eventHandler);
 	}
-	
+
 	Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (msg.what == -9) {
@@ -89,7 +92,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			} else if (msg.what == -8) {
 				requestCodeBtn.setText("获取验证码");
 				requestCodeBtn.setClickable(true);
-				i = 120;
+				i = 60;
 			} else {
 				int event = msg.arg1;
 				int result = msg.arg2;
@@ -100,10 +103,9 @@ public class LoginActivity extends Activity implements OnClickListener {
 					if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 						Toast.makeText(getApplicationContext(), "提交验证码成功",
 								Toast.LENGTH_SHORT).show();
-//						Intent intent = new Intent(LoginActivity.this,
-//								MainActivity.class);
-//						startActivity(intent);
+						login();
 						
+
 					} else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
 						Toast.makeText(getApplicationContext(), "验证码已经发送",
 								Toast.LENGTH_SHORT).show();
@@ -114,38 +116,48 @@ public class LoginActivity extends Activity implements OnClickListener {
 			}
 		}
 	};
-	
-	public void login(){
-		String url ="http://"+Content.getIp()+":8080/HXXa/UserLoginServlet";
+
+	public void login() {
+		String url = "http://" + Content.getIp()
+				+ ":8080/HXXa/UserLoginServlet";
 		HttpUtils http = new HttpUtils();
 		RequestParams params = new RequestParams();
-		params.addQueryStringParameter("phone",phone);
+		params.addQueryStringParameter("phone", phone);
 		http.send(HttpMethod.GET, url, params, new RequestCallBack<String>() {
 
 			@Override
 			public void onFailure(HttpException arg0, String arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
-//				Type type = new TypeToken<User>(){}.getType();
-//				Gson gson = new Gson();
-//				gson.fromJson(arg0.result, type);
-			    Editor edit =sharedPreferences.edit();
-		        edit.putString("loginUser", arg0.result);
-		        edit.commit();
+				// Type type = new TypeToken<User>(){}.getType();
+				// Gson gson = new Gson();
+				// gson.fromJson(arg0.result, type);
+				if(sharedPreferences.getBoolean("aliasSet", false)){
+					Log.i("LoginAcitvity", "sharedPreferences");
+				}else{
+					setAlias(phone);
+					Log.i("LoginAcitvity", phone);
+				}
+				Editor edit = sharedPreferences.edit();
+				edit.putString("loginUser", arg0.result);
+				edit.commit();
+			 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+			 startActivity(intent);
 			}
 		});
-    
+
 	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		String phoneNums = inputPhoneEt.getText().toString();
-		phone =phoneNums;
+		phone = phoneNums;
 		switch (v.getId()) {
 		case R.id.login_request_code_btn:
 			// 1. 通过规则判断手机号
@@ -177,25 +189,22 @@ public class LoginActivity extends Activity implements OnClickListener {
 			break;
 
 		case R.id.login_commit_btn:
-			login();
+			
 			SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt
 					.getText().toString());
 			createProgressBar();
 			break;
 		}
 	}
-	
-	
-	
+
 	private boolean judgePhoneNums(String phoneNums) {
-		if (isMatchLength(phoneNums, 11)
-				&& isMobileNO(phoneNums)) {
+		if (isMatchLength(phoneNums, 11) && isMobileNO(phoneNums)) {
 			return true;
 		}
-		Toast.makeText(this, "手机号码输入有误！",Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, "手机号码输入有误！", Toast.LENGTH_SHORT).show();
 		return false;
 	}
-	
+
 	public static boolean isMatchLength(String str, int length) {
 		if (str.isEmpty()) {
 			return false;
@@ -203,7 +212,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 			return str.length() == length ? true : false;
 		}
 	}
-	
+
 	public static boolean isMobileNO(String mobileNums) {
 		/*
 		 * 移动：134、135、136、137、138、139、150、151、157(TD)、158、159、187、188
@@ -227,11 +236,63 @@ public class LoginActivity extends Activity implements OnClickListener {
 		mProBar.setVisibility(View.VISIBLE);
 		layout.addView(mProBar);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		SMSSDK.unregisterAllEventHandler();
 		super.onDestroy();
 	}
-	
+
+	public void setAlias(String alias) {
+		if (TextUtils.isEmpty(alias)) {
+			Log.i("LoginAcitvity", "isEmpty");
+			return;
+		}
+		if (!JpushUtil.isValidTagAndAlias(alias)) {
+			Log.i("LoginAcitvity", "isValidTagAndAlias");
+			return;
+		}
+		// 调用 Handler 来异步设置别名
+		mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, alias));
+	}
+
+	private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+		@Override
+		public void gotResult(int code, String alias, Set<String> tags) {
+			String logs;
+			switch (code) {
+			case 0:
+				logs = "Set tag and alias success";
+				Log.i("LoginAcitvity", logs);
+				// 建议这里往 SharePreference 里写一个成功设置的状态。成功设置一次后，以后不必再次设置了。
+				sharedPreferences.edit().putBoolean("aliasSet", true).commit();
+				break;
+			case 6002:
+				logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+				Log.i("LoginAcitvity", logs);
+				// 延迟 60 秒来调用 Handler 设置别名
+				mHandler.sendMessageDelayed(
+						mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+				break;
+			default:
+				logs = "Failed with errorCode = " + code;
+				Log.i("LoginAcitvity", logs);
+			}
+		}
+	};
+	private static final int MSG_SET_ALIAS = 1001;
+	private final Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case MSG_SET_ALIAS:
+				// 调用 JPush 接口来设置别名。
+				JPushInterface.setAliasAndTags(getApplicationContext(),
+						(String) msg.obj, null, mAliasCallback);
+				break;
+			default:
+			}
+		}
+	};
 }
