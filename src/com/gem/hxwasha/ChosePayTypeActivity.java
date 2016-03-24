@@ -9,10 +9,10 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -58,7 +58,7 @@ public class ChosePayTypeActivity extends Activity {
 	@ViewInject(R.id.tv_pay_type_store_name)
 	TextView tvShopName;
 	@ViewInject(R.id.btn_submit_order)
-	ImageView ivSubmit;
+	Button ivSubmit;
 	@ViewInject(R.id.lv_pay_order_detail)
 	ListView lv;
 	@ViewInject(R.id.iv_return)
@@ -126,14 +126,18 @@ public class ChosePayTypeActivity extends Activity {
 		tvTotalMoney.setText(orders.getTotal()+"");
 		
 		//优惠券的控件赋值
+		if(orders.getUserCoupon() != null){
 		needPay = orders.getTotal()-orders.getUserCoupon().getCoupon().getValue();
 		tvCoupontValue.setText(orders.getUserCoupon().getCoupon().getValue()+"");
 		tvRealPay.setText(needPay+"");
 		tvCouponValueBottom.setText(orders.getUserCoupon().getCoupon().getValue()+"");
-		
 		tvPayBottom.setText(needPay+"");
-		
-		Log.i("TTT", needPay+"");
+		}else{
+			tvCoupontValue.setText("0");
+			tvCouponValueBottom.setText("0");
+			tvRealPay.setText(orders.getTotal()+"");
+			tvPayBottom.setText(orders.getTotal()+"");
+		}
 		
 		//显示lv列表(万能适配器)
 		 lv.setAdapter(new CommonAdapter<OrderClothes>(this, ocs, R.layout.item_order_details) {

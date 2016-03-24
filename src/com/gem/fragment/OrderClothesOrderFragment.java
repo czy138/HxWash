@@ -3,14 +3,13 @@ package com.gem.fragment;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -27,11 +26,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gem.entity.Assess;
 import com.gem.entity.OrderStatus;
 import com.gem.entity.Orders;
 import com.gem.entity.User;
@@ -42,6 +41,7 @@ import com.gem.util.CommonAdapter;
 import com.gem.util.Content;
 import com.gem.util.ImageUtil;
 import com.gem.util.ViewHolder;
+import com.gem.view.AssessDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -134,6 +134,7 @@ public class OrderClothesOrderFragment extends Fragment {
 			}
 		};
 		lvOrder.setAdapter(adapter);
+		
 		
 	}
 	
@@ -258,6 +259,7 @@ public class OrderClothesOrderFragment extends Fragment {
 					break;
 				case DONE:
 					//评价订单
+					createDialog(item);
 					break;
 				}
 				break;
@@ -290,8 +292,71 @@ public class OrderClothesOrderFragment extends Fragment {
 				break;
 			}
 		}
+
+	}
+	
+	//评价对话框
+	private void createDialog(final Orders order) {
+		// TODO Auto-generated method stub
+		final AssessDialog.Builder builder = new AssessDialog.Builder(context);  
+        builder.setTitle("评论");  
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {  
+            public void onClick(DialogInterface dialog, int which) {  
+                dialog.dismiss();  
+                //设置你的操作事项  
+               int mark =(int) builder.getRatingBar().getRating();
+               String content = builder.getEtAssess().getText().toString();
+               Assess assess = new Assess();
+               assess.setBusiness(order.getBusiness());
+               assess.setUser(order.getUser());
+               assess.setMark(mark);
+               assess.setConntent(content);
+               assess(assess,order);
+            }  
+        });  
+  
+        builder.setNegativeButton("取消",  
+                new android.content.DialogInterface.OnClickListener() {  
+                    public void onClick(DialogInterface dialog, int which) {  
+                        dialog.dismiss();  
+                    }  
+                });  
+  
+        builder.create().show();  
+	}
+	
+	public void assess(Assess assess,Orders order){
+		String url ="http://"+Content.getIp()+":8080/HXXa/AssessServlet";
+		String assessStr = null;
+		String orderStr = null;
+		if(assess!=null&&order!=null){
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+			assessStr = gson.toJson(assess);
+			orderStr = gson.toJson(order);
+		}
+		RequestParams params = new RequestParams();
+		params.addQueryStringParameter("assess",assessStr);
+		params.addQueryStringParameter("order",orderStr);
+		HttpUtils http = new HttpUtils();
+		http.send(HttpMethod.GET, url, params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				Log.i("AssessHttp", "访问失败");
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				Log.i("AssessHttp", "访问成功");
+				notifyList(arg0.result);
+			}
+		});
 		
 	}
+	
+	
 	
 	public void chageOrderStatus(final Orders item,final Button left,final Button right,final TextView status){
 		Gson gson= new GsonBuilder().setDateFormat("yyy-MM-dd HH:mm:ss").create();
@@ -317,6 +382,7 @@ public class OrderClothesOrderFragment extends Fragment {
 		});
 		
 	}
+	
 	public void registerMessageReceiver() {
 		mMessageReceiver = new MessageReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -336,27 +402,31 @@ public class OrderClothesOrderFragment extends Fragment {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Log.i("HxReceiver", "MessageReceiver");
 				if (Content.MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
 //	              String extras = intent.getStringExtra(Content.KEY_EXTRAS);
 				  String messge = intent.getStringExtra(Content.KEY_MESSAGE);
-	              Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-	              Type type = new TypeToken<Orders>(){}.getType();
-	              Toast.makeText(context, messge, 1).show();
-	              Orders order =gson.fromJson(messge, type);
-	              Iterator<Orders> iter = lists.iterator();
-	              while(iter.hasNext()){
-	            	 if(iter.next().getOrderId()==order.getOrderId()){
-	            		 iter.remove();
-	            	 }
-	              }
-	              lists.add(order);
-				  adapter.notifyDataSetChanged();
+				  notifyList(messge);
 						
 				}
 			}
 		}
 	  
+	  //order状态改变，服务器返回对象后，更新ListView
+	  public void notifyList(String orderStr){
+		  Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+          Type type = new TypeToken<Orders>(){}.getType();
+          Orders order =gson.fromJson(orderStr, type);
+          if(lists!=null&&order!=null){
+              for(int i =0 ;i<lists.size();i++){
+            	  if(lists.get(i).getOrderId()==order.getOrderId()){
+            		  lists.remove(i);
+            		  lists.add(i,order);
+            	  }
+            	  
+              }
+          }
+		  adapter.notifyDataSetChanged();
+	  }
 	  public void setCostomMsg(String str){
 		  
 	  }
